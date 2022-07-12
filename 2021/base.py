@@ -1,6 +1,5 @@
 """https://adventofcode.com/2021/day/"""
 from unittest import TestCase
-from unittest.mock import patch
 
 INPUT_FILE = 'input.txt'
 TEST_INPUT_FILE = 'test_input.txt'

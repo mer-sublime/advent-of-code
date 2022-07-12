@@ -1,6 +1,6 @@
 """https://adventofcode.com/2021/day/5"""
-from enum import Enum
 import unittest
+from enum import Enum
 
 INPUT_FILE = 'input.txt'
 TEST_INPUT_FILE = 'test_input.txt'
