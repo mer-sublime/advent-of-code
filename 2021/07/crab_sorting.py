@@ -7,7 +7,7 @@ INPUT_FILE = 'input.txt'
 TEST_INPUT_FILE = 'test_input.txt'
 
 
-def triangular_sum(n):
+def sum_triangular(n):
     return n * (n + 1) // 2
 
 
@@ -22,9 +22,9 @@ class CrabSorting:
         return sum([abs(crab - pos) for crab in self.crabs])
 
     def find_fuel_cost_triangular(self, pos):
-        """n steps require n x (n + 1) / 2 fuel units."""
+        """n steps require n(n + 1) / 2 fuel units."""
         # return sum([sum(range(abs(crab - pos) + 1)) for crab in self.crabs])
-        return sum([triangular_sum(abs(crab - pos)) for crab in self.crabs])
+        return sum([sum_triangular(abs(crab - pos)) for crab in self.crabs])
 
     def part_one(self):
         """Find how much fuel is needed by each crab to reach target position."""
@@ -49,12 +49,13 @@ class CrabSorting:
         positions = range(min(self.crabs), max(self.crabs) + 1)
 
         # Try them all. Brute force rocks.
+        best_result = max(self.crabs) ** 3
         for pos in positions:
             # Find the amount of fuel needed for all crabs to reach target position.
             fuel = self.find_fuel_cost_triangular(pos=pos)
 
             # Keep the lowest value.
-            best_result = min(fuel, best_result) if 'best_result' in locals() else fuel
+            best_result = min(fuel, best_result)
 
             if fuel > best_result:    # When the result gets worse, return the previous value.
                 return best_result
