@@ -30,4 +30,4 @@ class TestPuzzle(TestCase):
 
 if __name__ == "__main__":
     print('Part One:', Puzzle().part_one())
-    print('Part Two:', Puzzle().part_two())
+    # print('Part Two:', Puzzle().part_two())
