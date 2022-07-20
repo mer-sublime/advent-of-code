@@ -22,10 +22,10 @@ class Puzzle:
 
 class TestPuzzle(TestCase):
     def test_part_one(self):
-        self.assertEqual(Puzzle(test=True).part_one(), True)
+        self.assertEqual(True, Puzzle(test=True).part_one())
 
     def test_part_two(self):
-        self.assertEqual(Puzzle(test=True).part_two(), True)
+        self.assertEqual(True, Puzzle(test=True).part_two())
 
 
 if __name__ == "__main__":
