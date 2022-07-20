@@ -94,10 +94,10 @@ def part_two_compute_rating(lines, gas):
 
 class TestPowerConsumption(TestCase):
     def test_part_one(self):
-        self.assertEqual(RatingsCalculator(test=True).part_one(), 198)
+        self.assertEqual(198, RatingsCalculator(test=True).part_one())
 
     def test_part_two(self):
-        self.assertEqual(RatingsCalculator(test=True).part_two(), 230)
+        self.assertEqual(230, RatingsCalculator(test=True).part_two())
 
 
 if __name__ == "__main__":

@@ -98,10 +98,10 @@ class VentMapper:
 
 class TestVentMapper(unittest.TestCase):
     def test_part_one(self):
-        self.assertEqual(VentMapper(test=True).part_one(), 5)
+        self.assertEqual(5, VentMapper(test=True).part_one())
 
     def test_part_two(self):
-        self.assertEqual(VentMapper(test=True).part_two(), 12)
+        self.assertEqual(12, VentMapper(test=True).part_two())
 
 
 if __name__ == "__main__":

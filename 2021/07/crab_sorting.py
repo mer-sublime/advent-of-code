@@ -73,14 +73,14 @@ class CrabSorting:
 
 class TestCrabSorting(TestCase):
     def test_part_one(self):
-        self.assertEqual(CrabSorting(test=True).part_one(), 37)
+        self.assertEqual(37, CrabSorting(test=True).part_one())
 
     def test_part_two(self):
-        self.assertEqual(CrabSorting(test=True).part_two(), 168)
+        self.assertEqual(168, CrabSorting(test=True).part_two())
 
     def test_part_two_brute_force(self):
-        self.assertEqual(CrabSorting(test=True).part_two_brute_force_for(), 168)
-        self.assertEqual(CrabSorting(test=True).part_two_brute_force_while(), 168)
+        self.assertEqual(168, CrabSorting(test=True).part_two_brute_force_for())
+        self.assertEqual(168, CrabSorting(test=True).part_two_brute_force_while())
 
 
 if __name__ == "__main__":

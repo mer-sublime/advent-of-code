@@ -69,11 +69,11 @@ class Submarine:
 class TestDive(TestCase):
 
     def test_part_one(self):
-        self.assertEqual(Dive(test=True).part_one(), 150)
+        self.assertEqual(150, Dive(test=True).part_one())
 
     def test_part_two(self):
-        self.assertEqual(Dive(test=True).part_two(), 900)
-        self.assertEqual(Submarine(test=True).move(), 900)
+        self.assertEqual(900, Dive(test=True).part_two())
+        self.assertEqual(900, Submarine(test=True).move())
 
 
 if __name__ == "__main__":

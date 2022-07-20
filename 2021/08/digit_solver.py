@@ -68,10 +68,10 @@ class DigitSolver:
 
 class TestDigitSolver(TestCase):
     def test_part_one(self):
-        self.assertEqual(DigitSolver(test=True).part_one(), 26)
+        self.assertEqual(26, DigitSolver(test=True).part_one())
 
     def test_part_two(self):
-        self.assertEqual(DigitSolver(test=True).part_two(), 61229)
+        self.assertEqual(61229, DigitSolver(test=True).part_two())
 
 
 if __name__ == "__main__":

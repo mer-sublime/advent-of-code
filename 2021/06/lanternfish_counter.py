@@ -37,9 +37,9 @@ class LanternFishCounter:
 
 class TestLanternFishCounter(TestCase):
     def test_pass_time(self):
-        self.assertEqual(LanternFishCounter(test=True).pass_time(days=18), 26)
-        self.assertEqual(LanternFishCounter(test=True).pass_time(days=80), 5934)
-        self.assertEqual(LanternFishCounter(test=True).pass_time(days=256), 26984457539)
+        self.assertEqual(26, LanternFishCounter(test=True).pass_time(days=18))
+        self.assertEqual(5934, LanternFishCounter(test=True).pass_time(days=80))
+        self.assertEqual(26984457539, LanternFishCounter(test=True).pass_time(days=256))
 
 
 if __name__ == "__main__":

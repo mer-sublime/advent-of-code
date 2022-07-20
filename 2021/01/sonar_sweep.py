@@ -27,11 +27,11 @@ class TestSolarSweep(TestCase):
 
     @patch.object(SolarSweep, 'get_input', return_value=input)
     def test_part_one(self, _):
-        self.assertEqual(SolarSweep().part_one(), 7)
+        self.assertEqual(7, SolarSweep().part_one())
 
     @patch.object(SolarSweep, 'get_input', return_value=input)
     def test_part_two(self, _):
-        self.assertEqual(SolarSweep().part_two(), 5)
+        self.assertEqual(5, SolarSweep().part_two())
 
 
 if __name__ == "__main__":

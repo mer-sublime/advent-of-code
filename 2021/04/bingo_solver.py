@@ -93,10 +93,10 @@ class BingoSolverTwo(BingoSolver):
 
 class TestPuzzle(TestCase):
     def test_part_one(self):
-        self.assertEqual(BingoSolver(test=True).play(), 4512)
+        self.assertEqual(4512, BingoSolver(test=True).play())
 
     def test_part_two(self):
-        self.assertEqual(BingoSolverTwo(test=True).play(), 1924)
+        self.assertEqual(1924, BingoSolverTwo(test=True).play())
 
 
 if __name__ == "__main__":
