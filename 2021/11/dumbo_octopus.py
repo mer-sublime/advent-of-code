@@ -11,21 +11,21 @@ COLS = 10
 
 
 class DumboOctopus:
-    def __init__(self, map, x, y, energy):
-        self.map, self.x, self.y, self.energy = map, x, y, energy
+    def __init__(self, grid, x, y, energy):
+        self.grid, self.x, self.y, self.energy = grid, x, y, energy
         self.has_flashed = False
         self.nearby_octopuses = []
 
     def get_nearby_octopuses(self):
         if not self.nearby_octopuses:
             min_row = self.x - 1 if self.x > 0 else 0
-            max_row = self.x + 1 if self.x < ROWS else ROWS
+            max_row = self.x + 1 if self.x + 1 < ROWS else self.x
             min_col = self.y - 1 if self.y > 0 else 0
-            max_col = self.y + 1 if self.y < COLS else COLS
-            for row in range(min_row, max_row):
-                for col in range(min_col, max_col):
+            max_col = self.y + 1 if self.y + 1 < COLS else self.y
+            for row in range(min_row, max_row + 1):
+                for col in range(min_col, max_col + 1):
                     if not (row == self.x and col == self.y):
-                        self.nearby_octopuses.append(self.map[row][col])
+                        self.nearby_octopuses.append(self.grid[row][col])
         return self.nearby_octopuses
 
     def flash(self):
@@ -39,9 +39,10 @@ class DumboOctopus:
         return flash_counter
 
     def incr_energy(self):
-        self.energy += 1
-        if self.energy > 9 and not self.has_flashed:
-            return self.flash()
+        if not self.has_flashed:
+            self.energy += 1
+            if self.energy > 9:
+                return self.flash()
         return 0
 
     def __repr__(self):
@@ -53,22 +54,22 @@ class DumboOctopus:
 class FlashForecaster:
     def __init__(self, test=False):
         self.input = TEST_INPUT_FILE if test else INPUT_FILE
-        self.map = [[0] * COLS for i in range(ROWS)]
+        self.grid = [[0] * COLS for _ in range(ROWS)]
         self.flash_counter = 0
         with open(self.input, 'r') as f:
             for row, line in enumerate(f):
                 for col, digit in enumerate(line.rstrip()):
-                    self.map[row][col] = DumboOctopus(map=self.map, x=row, y=col, energy=int(digit))
+                    self.grid[row][col] = DumboOctopus(grid=self.grid, x=row, y=col, energy=int(digit))
         print('Before any steps:')
-        self.print_map()
+        self.print_grid()
 
     def reset_flash_flags(self):
-        for line in self.map:
+        for line in self.grid:
             for octopus in line:
                 octopus.has_flashed = False
 
     def do_step(self):
-        for line in self.map:
+        for line in self.grid:
             for octopus in line:
                 self.flash_counter += octopus.incr_energy()
         self.reset_flash_flags()
@@ -77,14 +78,14 @@ class FlashForecaster:
         for step in range(1, STEPS + 1):
             self.do_step()
             print(f'\n After step {step}:')
-            self.print_map()
+            self.print_grid()
         return self.flash_counter
 
     def part_two(self):
         pass
 
-    def print_map(self):
-        pprint(self.map)
+    def print_grid(self):
+        pprint(self.grid)
 
 
 class TestFlashForecaster(TestCase):
@@ -92,9 +93,9 @@ class TestFlashForecaster(TestCase):
         self.assertEqual(1656, FlashForecaster(test=True).part_one())
 
     # def test_part_two(self):
-    #     self.assertEqual(True, DumboOctopus(test=True).part_two())
+    #     self.assertEqual(True, FlashForecaster(test=True).part_two())
 
 
 if __name__ == "__main__":
     print('Part One:', FlashForecaster().part_one())
-    # print('Part Two:', DumboOctopus().part_two())
+    # print('Part Two:', FlashForecaster().part_two())
