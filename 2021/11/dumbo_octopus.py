@@ -8,6 +8,7 @@ TEST_INPUT_FILE = 'test_input.txt'
 STEPS = 100
 ROWS = 10
 COLS = 10
+NB_OCTOPUSES = ROWS * COLS
 
 
 class DumboOctopus:
@@ -60,8 +61,8 @@ class FlashForecaster:
             for row, line in enumerate(f):
                 for col, digit in enumerate(line.rstrip()):
                     self.grid[row][col] = DumboOctopus(grid=self.grid, x=row, y=col, energy=int(digit))
-        print('Before any steps:')
-        self.print_grid()
+        # print('Before any steps:')
+        # self.print_grid()
 
     def reset_flash_flags(self):
         for line in self.grid:
@@ -72,17 +73,24 @@ class FlashForecaster:
         for line in self.grid:
             for octopus in line:
                 self.flash_counter += octopus.incr_energy()
-        self.reset_flash_flags()
 
     def part_one(self):
         for step in range(1, STEPS + 1):
             self.do_step()
-            print(f'\n After step {step}:')
-            self.print_grid()
+            # print(f'\n After step {step}:')
+            # self.print_grid()
+            self.reset_flash_flags()
         return self.flash_counter
 
     def part_two(self):
-        pass
+        step = 1
+        while True:
+            tmp_flash_counter = self.flash_counter
+            self.do_step()
+            if self.flash_counter - tmp_flash_counter == NB_OCTOPUSES:
+                return step
+            self.reset_flash_flags()
+            step += 1
 
     def print_grid(self):
         pprint(self.grid)
@@ -92,10 +100,10 @@ class TestFlashForecaster(TestCase):
     def test_part_one(self):
         self.assertEqual(1656, FlashForecaster(test=True).part_one())
 
-    # def test_part_two(self):
-    #     self.assertEqual(True, FlashForecaster(test=True).part_two())
+    def test_part_two(self):
+        self.assertEqual(195, FlashForecaster(test=True).part_two())
 
 
 if __name__ == "__main__":
     print('Part One:', FlashForecaster().part_one())
-    # print('Part Two:', FlashForecaster().part_two())
+    print('Part Two:', FlashForecaster().part_two())
