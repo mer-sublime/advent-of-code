@@ -62,11 +62,13 @@ class PathFinder:
     def explore(self, cave, path):
         # Add current cave to path
         path.append(cave)
+
         # Save path and exit if we reached the end
         if cave.name == END_NAME:
             self.paths.add('-'.join(node.name for node in path))
             return
-        # Explore all neighbours
+
+        # Explore neighbours
         for neighbour in cave.network:
             neighbour_type = neighbour.get_type()
             if neighbour_type is Cave.TYPES.BIG or neighbour not in path:
@@ -90,8 +92,14 @@ class TestPathFinder(TestCase):
     def test_part_one_3(self):
         self.assertEqual(226, PathFinder(input_file=TEST_INPUT_FILE_3).part_one())
 
-    # def test_part_two(self):
-    #     self.assertEqual(True, PathFinder(test=True).part_two())
+    # def test_part_two_1(self):
+    #     self.assertEqual(36, PathFinder(input_file=TEST_INPUT_FILE_1).part_two())
+    #
+    # def test_part_two_2(self):
+    #     self.assertEqual(103, PathFinder(input_file=TEST_INPUT_FILE_2).part_two())
+    #
+    # def test_part_two_3(self):
+    #     self.assertEqual(3509, PathFinder(input_file=TEST_INPUT_FILE_3).part_two())
 
 
 if __name__ == "__main__":
