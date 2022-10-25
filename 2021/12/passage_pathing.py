@@ -1,4 +1,4 @@
-"""https://adventofcode.com/2021/day/"""
+"""https://adventofcode.com/2021/day/12"""
 from enum import Enum
 from unittest import TestCase
 
