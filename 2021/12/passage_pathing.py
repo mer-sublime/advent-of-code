@@ -15,14 +15,21 @@ class Cave:
     class TYPES(Enum):
         BIG = 1
         SMALL = 2
+        START = 3
+        END = 4
 
     def __init__(self, name):
         self.name = name
         self.network = set()
 
-    def get_type(self):
+    @property
+    def type(self):
         if self.name.isupper():
             return self.TYPES.BIG
+        elif self.name == START_NAME:
+            return self.TYPES.START
+        elif self.name == END_NAME:
+            return self.TYPES.END
         return self.TYPES.SMALL
 
     def __eq__(self, other):
@@ -64,44 +71,61 @@ class PathFinder:
         path.append(cave)
 
         # Save path and exit if we reached the end
-        if cave.name == END_NAME:
+        if cave.type is Cave.TYPES.END:
             self.paths.add('-'.join(node.name for node in path))
             return
 
         # Explore neighbours
         for neighbour in cave.network:
-            neighbour_type = neighbour.get_type()
-            if neighbour_type is Cave.TYPES.BIG or neighbour not in path:
+            if neighbour.type is Cave.TYPES.BIG or neighbour not in path:
                 self.explore(cave=neighbour, path=path.copy())
 
-    def part_one(self):
+    def count_paths(self):
         self.explore(cave=self.caves[START_NAME], path=[])
         return len(self.paths)
 
-    def part_two(self):
-        pass
+
+class PathFinderTwo(PathFinder):
+
+    def explore(self, cave, path, can_revisit_small_cave=True):
+        # Add current cave to path
+        path.append(cave)
+
+        # Save path and exit if we reached the end
+        if cave.type is Cave.TYPES.END:
+            self.paths.add('-'.join(node.name for node in path))
+            return
+
+        # Explore neighbours
+        for neighbour in cave.network:
+            if neighbour.type is Cave.TYPES.BIG or neighbour not in path:
+                self.explore(cave=neighbour, path=path.copy(), can_revisit_small_cave=can_revisit_small_cave)
+            elif neighbour.type is Cave.TYPES.SMALL and can_revisit_small_cave and path.count(neighbour) == 1:
+                self.explore(cave=neighbour, path=path.copy(), can_revisit_small_cave=False)
 
 
 class TestPathFinder(TestCase):
-    def test_part_one_1(self):
-        self.assertEqual(10, PathFinder(input_file=TEST_INPUT_FILE_1).part_one())
+    def test_count_paths_1(self):
+        self.assertEqual(10, PathFinder(input_file=TEST_INPUT_FILE_1).count_paths())
 
-    def test_part_one_2(self):
-        self.assertEqual(19, PathFinder(input_file=TEST_INPUT_FILE_2).part_one())
+    def test_count_paths_2(self):
+        self.assertEqual(19, PathFinder(input_file=TEST_INPUT_FILE_2).count_paths())
 
-    def test_part_one_3(self):
-        self.assertEqual(226, PathFinder(input_file=TEST_INPUT_FILE_3).part_one())
+    def test_count_paths_3(self):
+        self.assertEqual(226, PathFinder(input_file=TEST_INPUT_FILE_3).count_paths())
 
-    # def test_part_two_1(self):
-    #     self.assertEqual(36, PathFinder(input_file=TEST_INPUT_FILE_1).part_two())
-    #
-    # def test_part_two_2(self):
-    #     self.assertEqual(103, PathFinder(input_file=TEST_INPUT_FILE_2).part_two())
-    #
-    # def test_part_two_3(self):
-    #     self.assertEqual(3509, PathFinder(input_file=TEST_INPUT_FILE_3).part_two())
+
+class TestPathFinderTwo(TestCase):
+    def test_count_paths_1(self):
+        self.assertEqual(36, PathFinderTwo(input_file=TEST_INPUT_FILE_1).count_paths())
+
+    def test_count_paths_2(self):
+        self.assertEqual(103, PathFinderTwo(input_file=TEST_INPUT_FILE_2).count_paths())
+
+    def test_count_paths_3(self):
+        self.assertEqual(3509, PathFinderTwo(input_file=TEST_INPUT_FILE_3).count_paths())
 
 
 if __name__ == "__main__":
-    print('Part One:', PathFinder().part_one())
-    # print('Part Two:', Puzzle().part_two())
+    print('Part One:', PathFinder().count_paths())
+    print('Part Two:', PathFinderTwo().count_paths())
