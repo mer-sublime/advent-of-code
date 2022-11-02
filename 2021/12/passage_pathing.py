@@ -100,29 +100,27 @@ class PathFinderTwo(PathFinder):
         for neighbour in cave.network:
             if neighbour.type is Cave.TYPES.BIG or neighbour not in path:
                 self.explore(cave=neighbour, path=path.copy(), can_revisit_small_cave=can_revisit_small_cave)
-            elif neighbour.type is Cave.TYPES.SMALL and can_revisit_small_cave and path.count(neighbour) == 1:
+            elif neighbour.type is Cave.TYPES.SMALL and can_revisit_small_cave:
                 self.explore(cave=neighbour, path=path.copy(), can_revisit_small_cave=False)
 
 
-class TestPathFinder(TestCase):
-    def test_count_paths_1(self):
+class TestPathFinders(TestCase):
+    def test_part_one_1(self):
         self.assertEqual(10, PathFinder(input_file=TEST_INPUT_FILE_1).count_paths())
 
-    def test_count_paths_2(self):
+    def test_part_one_2(self):
         self.assertEqual(19, PathFinder(input_file=TEST_INPUT_FILE_2).count_paths())
 
-    def test_count_paths_3(self):
+    def test_part_one_3(self):
         self.assertEqual(226, PathFinder(input_file=TEST_INPUT_FILE_3).count_paths())
 
-
-class TestPathFinderTwo(TestCase):
-    def test_count_paths_1(self):
+    def test_part_two_1(self):
         self.assertEqual(36, PathFinderTwo(input_file=TEST_INPUT_FILE_1).count_paths())
 
-    def test_count_paths_2(self):
+    def test_part_two_2(self):
         self.assertEqual(103, PathFinderTwo(input_file=TEST_INPUT_FILE_2).count_paths())
 
-    def test_count_paths_3(self):
+    def test_part_two_3(self):
         self.assertEqual(3509, PathFinderTwo(input_file=TEST_INPUT_FILE_3).count_paths())
 
 
