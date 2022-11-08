@@ -56,6 +56,7 @@ class PaperFolder:
         pass
 
     def part_one(self):
+        self.print_grid()
         return 17
 
     def part_two(self):
