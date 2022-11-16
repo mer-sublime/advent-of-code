@@ -107,7 +107,9 @@ class PaperFolder:
         return self.count_dots()
 
     def part_two(self):
-        pass
+        for instruction in self.instructions:
+            self.grid = instruction.fold(self.grid)
+        return self.count_dots()
 
 
 class TestPaperFolder(TestCase):
@@ -152,10 +154,23 @@ class TestPaperFolder(TestCase):
             PaperFolder(test=True).print_grid()
             self.assertEqual(textwrap.dedent(expected_grid).strip(), mock_stdout.getvalue().strip())
 
-    def test_part_two(self):
-        self.assertEqual(True, PaperFolder(test=True).part_two())
+    def test_part_two_print(self):
+        expected_grid = '''
+            #####
+            #...#
+            #...#
+            #...#
+            #####
+            .....
+            .....
+        '''
+        folder = PaperFolder(test=True)
+        folder.part_two()
+        with patch('sys.stdout', new=StringIO()) as mock_stdout:
+            folder.print_grid()
+            self.assertEqual(textwrap.dedent(expected_grid).strip(), mock_stdout.getvalue().strip())
 
 
 if __name__ == "__main__":
     print('Part One:', PaperFolder().part_one())
-    # print('Part Two:', PaperFolder().part_two())
+    print('Part Two:', PaperFolder().part_two())
