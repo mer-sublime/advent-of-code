@@ -109,8 +109,6 @@ class TestPointsFolder(TestCase):
             ......#...#
             #...#......
             .#.#..#.###
-            ...........
-            ...........
         '''
         folder = PointsFolder(test=True)
         folder.part_one()
@@ -147,8 +145,6 @@ class TestPointsFolder(TestCase):
             #...#
             #...#
             #####
-            .....
-            .....
         '''
         folder = PointsFolder(test=True)
         folder.part_two()
