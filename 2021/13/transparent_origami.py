@@ -41,7 +41,7 @@ class FoldInstruction:
         flipped_grid = list(zip(*grid))
         # Fold the flipped grid
         folded_grid = self.fold_horizontally(grid=flipped_grid)
-        # Flip the folden grid back
+        # Flip the folded grid back
         return list(zip(*folded_grid))
 
     def fold_horizontally(self, grid: list[list[str]]) -> list[list[str]]:
@@ -88,8 +88,6 @@ class PaperFolder:
         # Mark dots
         for point in points:
             grid[point[1]][point[0]] = SYMBOLS.DOT.value
-
-        # Cast rows into strings
         self.grid = grid
 
     def print_grid(self):
