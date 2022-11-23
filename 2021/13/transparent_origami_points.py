@@ -29,48 +29,46 @@ class FoldInstruction:
         self.axis = axis
         self.value = int(value)
 
-    def fold(self, grid: list[list], debug=False) -> list[list]:
-        if debug:
-            print(f'Folding along {self.axis}={self.value}')
-
+    def fold(self, points: set[tuple[int, int]]) -> set[tuple[int, int]]:
         match self.axis:
             case AXIS.X.value:
-                return self.fold_vertically(grid=grid)
+                return self.fold_vertically(points=points)
             case AXIS.Y.value:
-                return self.fold_horizontally(grid=grid)
+                return self.fold_horizontally(points=points)
 
-    def fold_vertically(self, grid: list[list]) -> list[list]:
-        # Flip the grid
-        flipped_grid = list(zip(*grid))
-        # Fold the flipped grid
-        folded_grid = self.fold_horizontally(grid=flipped_grid)
-        # Flip the folden grid back
-        return list(zip(*folded_grid))
+    def fold_vertically(self, points: set[tuple[int, int]]) -> set[tuple[int, int]]:
+        new_points = set()
+        for point in points:
+            x, y = point
+            if x > self.value:
+                new_x = 2 * self.value - x
+                new_points.add((new_x, y))
+            else:
+                new_points.add(point)
+        return new_points
 
-    def fold_horizontally(self, grid: list[list]) -> list[list]:
-        def merge_lines(line_a: list[str], line_b: list[str]) -> list[str]:
-            """Merge two lines in one."""
-            def merge_chars(a: str, b: str) -> str:
-                """Return the DOT symbol if there is at least one and the EMPTY symbol otherwise."""
-                return SYMBOLS.DOT.value if SYMBOLS.DOT.value in (a, b) else SYMBOLS.EMPTY.value
-
-            return [merge_chars(a, b) for a, b in zip(line_a, line_b)]
-
-        top_half = grid[:self.value]
-        bottom_half = grid[self.value + 1:]
-        return [merge_lines(line_a, line_b) for line_a, line_b in zip(top_half, reversed(bottom_half))]
+    def fold_horizontally(self, points: set[tuple[int, int]]) -> set[tuple[int, int]]:
+        new_points = set()
+        for point in points:
+            x, y = point
+            if y > self.value:
+                new_y = 2 * self.value - y
+                new_points.add((x, new_y))
+            else:
+                new_points.add(point)
+        return new_points
 
 
 class PointsFolder:
     def __init__(self, test=False):
         self.input = TEST_INPUT_FILE if test else INPUT_FILE
-        self.max_row, self.max_col = 0, 0
-        self.points, self.instructions = [], []
+        self.points = set()
+        self.instructions = []
         with open(self.input, 'r') as f:
             # Init points
             while point := next(f).rstrip():
                 point = point.split(',')
-                self.points.append((int(point[0]), int(point[1])))
+                self.points.add((int(point[0]), int(point[1])))
 
             # Parse instructions
             for line in f:
@@ -83,7 +81,7 @@ class PointsFolder:
         for y in range(max_y + 1):
             row = ''
             for x in range(max_x + 1):
-                row += '#' if (x, y) in self.points else '.'
+                row += SYMBOLS.DOT.value if (x, y) in self.points else SYMBOLS.EMPTY.value
             print(row)
 
     def count_dots(self) -> int:
@@ -96,7 +94,7 @@ class PointsFolder:
 
     def part_two(self):
         for instruction in self.instructions:
-            self.grid = instruction.fold(self.grid)
+            self.points = instruction.fold(points=self.points)
         return self.count_dots()
 
 
