@@ -30,7 +30,7 @@ class FoldInstruction:
         self.value = int(value)
 
     def fold(self, points: set[tuple[int, int]]) -> set[tuple[int, int]]:
-        def transpose_point() -> callable:
+        def get_transpose_method() -> callable:
             def transpose_horizontally(x: int, y: int) -> tuple[int, int]:
                 return (x, y) if x <= self.value else (2 * self.value - x, y)
 
@@ -38,7 +38,7 @@ class FoldInstruction:
                 return (x, y) if y <= self.value else (x, 2 * self.value - y)
 
         new_points = set()
-        transpose = transpose_point()
+        transpose = get_transpose_method()
         for point in points:
             new_points.add(transpose(*point))
         return new_points
