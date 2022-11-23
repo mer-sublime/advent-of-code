@@ -29,7 +29,7 @@ class FoldInstruction:
         self.axis = axis
         self.value = int(value)
 
-    def fold(self, grid: list[list], debug=False) -> list[list]:
+    def fold(self, grid: list[list[str]], debug=False) -> list[list[str]]:
         if debug:
             print(f'Folding along {self.axis}={self.value}')
 
@@ -39,7 +39,7 @@ class FoldInstruction:
             case AXIS.Y.value:
                 return self.fold_horizontally(grid=grid)
 
-    def fold_vertically(self, grid: list[list]) -> list[list]:
+    def fold_vertically(self, grid: list[list[str]]) -> list[list[str]]:
         # Flip the grid
         flipped_grid = list(zip(*grid))
         # Fold the flipped grid
@@ -47,7 +47,7 @@ class FoldInstruction:
         # Flip the folden grid back
         return list(zip(*folded_grid))
 
-    def fold_horizontally(self, grid: list[list]) -> list[list]:
+    def fold_horizontally(self, grid: list[list[str]]) -> list[list[str]]:
         def merge_lines(line_a: list[str], line_b: list[str]) -> list[str]:
             """Merge two lines in one."""
             def merge_chars(a: str, b: str) -> str:
