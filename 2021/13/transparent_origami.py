@@ -29,10 +29,7 @@ class FoldInstruction:
         self.axis = axis
         self.value = int(value)
 
-    def fold(self, grid: list[list[str]], debug=False) -> list[list[str]]:
-        if debug:
-            print(f'Folding along {self.axis}={self.value}')
-
+    def fold(self, grid: list[list[str]]) -> list[list[str]]:
         match self.axis:
             case AXIS.X.value:
                 return self.fold_vertically(grid=grid)
