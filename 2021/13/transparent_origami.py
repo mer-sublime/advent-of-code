@@ -80,7 +80,7 @@ class PaperFolder:
         # Init grid
         self.init_grid(points=points)
 
-    def init_grid(self, points):
+    def init_grid(self, points: list[tuple[int, int]]):
         # Create empty grid
         self.max_row = max((point[0] for point in points))
         self.max_col = max((point[1] for point in points))
