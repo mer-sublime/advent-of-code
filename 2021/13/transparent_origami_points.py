@@ -30,32 +30,17 @@ class FoldInstruction:
         self.value = int(value)
 
     def fold(self, points: set[tuple[int, int]]) -> set[tuple[int, int]]:
-        match self.axis:
-            case AXIS.X.value:
-                return self.fold_vertically(points=points)
-            case AXIS.Y.value:
-                return self.fold_horizontally(points=points)
+        def transpose_point() -> callable:
+            def transpose_horizontally(x: int, y: int) -> tuple[int, int]:
+                return (x, y) if x <= self.value else (2 * self.value - x, y)
 
-    def fold_vertically(self, points: set[tuple[int, int]]) -> set[tuple[int, int]]:
-        new_points = set()
-        for point in points:
-            x, y = point
-            if x > self.value:
-                new_x = 2 * self.value - x
-                new_points.add((new_x, y))
-            else:
-                new_points.add(point)
-        return new_points
+            def transpose_vertically(x: int, y: int) -> tuple[int, int]:
+                return (x, y) if y <= self.value else (x, 2 * self.value - y)
 
-    def fold_horizontally(self, points: set[tuple[int, int]]) -> set[tuple[int, int]]:
         new_points = set()
+        transpose = transpose_point()
         for point in points:
-            x, y = point
-            if y > self.value:
-                new_y = 2 * self.value - y
-                new_points.add((x, new_y))
-            else:
-                new_points.add(point)
+            new_points.add(transpose(*point))
         return new_points
 
 
