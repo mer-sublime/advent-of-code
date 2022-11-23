@@ -37,6 +37,11 @@ class FoldInstruction:
             def transpose_vertically(x: int, y: int) -> tuple[int, int]:
                 return (x, y) if y <= self.value else (x, 2 * self.value - y)
 
+            if self.axis == AXIS.X.value:
+                return transpose_horizontally
+            elif self.axis == AXIS.Y.value:
+                return transpose_vertically
+
         new_points = set()
         transpose = get_transpose_method()
         for point in points:
