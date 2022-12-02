@@ -27,6 +27,6 @@ class TestPuzzle(TestCase):
 #        self.assertEqual(True, Puzzle(test=True).part_two())
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     print('Part One:', Puzzle().part_one())
     # print('Part Two:', Puzzle().part_two())
