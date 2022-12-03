@@ -14,13 +14,15 @@ class RucksackReorganizer:
 
     def part_one(self):
         with open(self.input, 'r') as f:
-            misplaced_letters = [next(iter(set(line[len(line) // 2:]).intersection(line[:len(line) // 2]))) for line in f]
+            misplaced_letters = [next(iter(set(line[len(line) // 2:]).intersection(line[:len(line) // 2])))
+                                 for line in f]
         return sum(self.letter_scores[letter] for letter in misplaced_letters)
 
     def part_two(self):
         with open(self.input, 'r') as f:
             elves_groups = list(zip(*[f]*3))
-        badges = [next(iter(set(group[0].rstrip()).intersection(group[1].rstrip()).intersection(group[2].rstrip()))) for group in elves_groups]
+        badges = [next(iter(set(group[0].rstrip()).intersection(group[1].rstrip()).intersection(group[2].rstrip())))
+                  for group in elves_groups]
         return sum(self.letter_scores[letter] for letter in badges)
 
 
