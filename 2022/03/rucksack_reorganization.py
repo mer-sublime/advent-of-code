@@ -10,20 +10,22 @@ class RucksackReorganizer:
     def __init__(self, test=False):
         self.input = TEST_INPUT_FILE if test else INPUT_FILE
 
-    letter_scores = {letter: index + 1 for index, letter in enumerate(string.ascii_lowercase + string.ascii_uppercase)}
+    type_priorities = {letter: index + 1 for index, letter in enumerate(string.ascii_lowercase + string.ascii_uppercase)}
 
-    def part_one(self):
+    def part_one(self) -> int:
+        """Find the priority of every item types found in both compartments of a rucksack."""
         with open(self.input, 'r') as f:
-            misplaced_letters = [next(iter(set(line[len(line) // 2:]).intersection(line[:len(line) // 2])))
-                                 for line in f]
-        return sum(self.letter_scores[letter] for letter in misplaced_letters)
+            misplaced_types = [next(iter(set(line[len(line) // 2:]).intersection(line[:len(line) // 2])))
+                               for line in f]
+        return sum(self.type_priorities[item_type] for item_type in misplaced_types)
 
-    def part_two(self):
+    def part_two(self) -> int:
+        """Find the priority of every badge given to each group of 3 rucksacks."""
         with open(self.input, 'r') as f:
-            elves_groups = list(zip(*[f]*3))
+            rucksack_groups = list(zip(*[f]*3))
         badges = [next(iter(set(group[0].rstrip()).intersection(group[1].rstrip()).intersection(group[2].rstrip())))
-                  for group in elves_groups]
-        return sum(self.letter_scores[letter] for letter in badges)
+                  for group in rucksack_groups]
+        return sum(self.type_priorities[letter] for letter in badges)
 
 
 class TestRucksackReorganizer(TestCase):

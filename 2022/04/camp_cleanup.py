@@ -15,9 +15,11 @@ class CampCleaner:
         self.groups = sections_to_clean
 
     def part_one(self):
+        """Count pairs of assignments where one range fully contains the other."""
         return sum(set(range_1).issubset(range_2) or set(range_2).issubset(range_1) for range_1, range_2 in self.groups)
 
     def part_two(self):
+        """Count pairs of assignments where both range overlap."""
         return sum(len(set(range_1).intersection(range_2)) > 0 for range_1, range_2 in self.groups)
 
 

@@ -8,6 +8,7 @@ from enum import Enum
 
 
 class MultipleEnum(Enum):
+    """Custom Enum type that can use multiple values."""
     def __new__(cls, *values):
         obj = object.__new__(cls)
         # first value is canonical value
@@ -25,6 +26,7 @@ class MultipleEnum(Enum):
 
 
 class RoundPartOne:
+    """A Round of Rock Paper Scissor in Part One."""
     class Shape(MultipleEnum):
         ROCK = 1, 'A', 'X'
         PAPER = 2, 'B', 'Y'
@@ -35,27 +37,26 @@ class RoundPartOne:
         DRAW = 3
         WIN = 6
 
-    win_against = {
-        Shape.ROCK: Shape.SCISSORS,
-        Shape.PAPER: Shape.ROCK,
-        Shape.SCISSORS: Shape.PAPER,
-    }
-
-    my_shape = None
-    their_shape = None
-
     def __init__(self, first_shape: str, second_shape: str):
         self.their_shape = self.Shape(first_shape)
         self.my_shape = self.Shape(second_shape)
-        # Determine outcome
+        self.outcome = self.determine_outcome()
+
+    def determine_outcome(self) -> Outcome:
+        """Determine the outcome of the round."""
+        win_against = {
+            self.Shape.ROCK: self.Shape.SCISSORS,
+            self.Shape.PAPER: self.Shape.ROCK,
+            self.Shape.SCISSORS: self.Shape.PAPER,
+        }
         if self.my_shape == self.their_shape:
-            self.outcome = self.Outcome.DRAW
-        elif self.win_against[self.my_shape] == self.their_shape:
-            self.outcome = self.Outcome.WIN
-        else:
-            self.outcome = self.Outcome.LOSS
+            return self.Outcome.DRAW
+        if self.win_against[self.my_shape] == self.their_shape:
+            return self.Outcome.WIN
+        return self.Outcome.LOSS
 
     def get_score(self) -> int:
+        """Count points awarded for this round."""
         return self.my_shape.value + self.outcome.value
 
 
@@ -70,24 +71,26 @@ class RoundPartTwo(RoundPartOne):
         DRAW = 3, 'Y'
         WIN = 6, 'Z'
 
-    win_against = {
-        Shape.ROCK: Shape.SCISSORS,
-        Shape.PAPER: Shape.ROCK,
-        Shape.SCISSORS: Shape.PAPER,
-    }
-    lose_against = {value: key for key, value in win_against.items()}
-
     def __init__(self, their_shape: str, outcome: str):
         self.their_shape = self.Shape(their_shape)
         self.outcome = self.Outcome(outcome)
-        # Determine my shape
+        self.my_shape = self.determine_my_shape()
+
+    def determine_my_shape(self) -> Shape:
+        """Determine my shape depending of the expected outcome."""
+        win_against = {
+            self.Shape.ROCK: self.Shape.SCISSORS,
+            self.Shape.PAPER: self.Shape.ROCK,
+            self.Shape.SCISSORS: self.Shape.PAPER,
+        }
+        lose_against = {value: key for key, value in win_against.items()}
         match self.outcome:
             case self.Outcome.DRAW:
-                self.my_shape = self.their_shape
+                return self.their_shape
             case self.Outcome.LOSS:
-                self.my_shape = self.win_against[self.their_shape]
+                return win_against[self.their_shape]
             case self.Outcome.WIN:
-                self.my_shape = self.lose_against[self.their_shape]
+                return lose_against[self.their_shape]
 
 
 class RockPaperScissors:
@@ -97,12 +100,12 @@ class RockPaperScissors:
     def part_one(self):
         with open(self.input, 'r') as f:
             rounds = [RoundPartOne(*line.split()) for line in f]
-        return sum(round.get_score() for round in rounds)
+        return sum(game.get_score() for game in rounds)
 
     def part_two(self):
         with open(self.input, 'r') as f:
             rounds = [RoundPartTwo(*line.split()) for line in f]
-        return sum(round.get_score() for round in rounds)
+        return sum(game.get_score() for game in rounds)
 
 
 class TestRockPaperScissors(TestCase):
