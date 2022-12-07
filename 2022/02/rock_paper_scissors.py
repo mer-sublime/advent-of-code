@@ -51,7 +51,7 @@ class RoundPartOne:
         }
         if self.my_shape == self.their_shape:
             return self.Outcome.DRAW
-        if self.win_against[self.my_shape] == self.their_shape:
+        if win_against[self.my_shape] == self.their_shape:
             return self.Outcome.WIN
         return self.Outcome.LOSS
 
