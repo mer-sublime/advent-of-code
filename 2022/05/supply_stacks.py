@@ -1,4 +1,4 @@
-"""https://adventofcode.com/2022/day/"""
+"""https://adventofcode.com/2022/day/5"""
 import re
 from abc import ABC, abstractmethod
 from collections import deque
@@ -27,7 +27,7 @@ class CargoCrane(ABC):
         while (line := next(file).rstrip())[1] != '1':
             stacks.insert(0, [line[i] for i in range(1, len(line), 4)])
         stacks = list(zip_longest(*stacks, fillvalue=' '))
-        self.stacks = [deque([crate for crate in stack if crate != ' ']) for stack in stacks]
+        self.stacks = [deque(crate for crate in stack if crate != ' ') for stack in stacks]
 
     def parse_instructions(self, file):
         instructions = []
