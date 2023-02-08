@@ -1,78 +1,70 @@
 """https://adventofcode.com/2022/day/20"""
 import itertools
-from dataclasses import dataclass
 from unittest import TestCase
 
 INPUT_FILE = 'input.txt'
 TEST_INPUT_FILE = 'test_input.txt'
 
 
-@dataclass
-class Number:
-    value: int
-
-    def __add__(self, other):
-        """Can be added like regular int instances."""
-        return self.value + other
-
-    def __eq__(self, other):
-        """Differentiate instances based on memory address, not on value."""
-        return id(self) == id(other)
-
-
 class FileDecryptor:
     def __init__(self, test=False):
-        self.encrypted_values = []
+        self.instructions = []
         self.parse_input(input_file=TEST_INPUT_FILE if test else INPUT_FILE)
 
     def parse_input(self, input_file):
         with open(input_file, 'r') as f:
-            self.encrypted_values = [Number(int(line)) for line in f]
+            values = [int(line) for line in f]
+        self.instructions = [t for t in enumerate(values)]
 
-    def decrypt_values(self):
-        values = self.encrypted_values.copy()
+    def mix(self, rounds=1):
+        values = self.instructions.copy()
         size_after_pop = len(values) - 1
-        for number in self.encrypted_values:
-            index = values.index(number)
-            new_index = number + index
+        for num_tuple in self.instructions * rounds:
+            index = values.index(num_tuple)
+            new_index = (num_tuple[1] + index) % size_after_pop
             values.pop(index)
-
-            if abs(new_index) > size_after_pop:
-                new_index = new_index % size_after_pop
-            if new_index == 0:  # Position 0 = at the end in the given example.
-                values.append(number.value)
+            # If new index = 0 -> move at the end of the list.
+            if new_index == 0:
+                values.append(num_tuple)
             else:
-                values.insert(new_index, number.value)
+                values.insert(new_index, num_tuple)
         return values
 
     @staticmethod
     def get_coordinates(values):
+        """Return the sum of the 1000th, 2000th and 3000th values after the first 0."""
         if not values:
             return
 
         c = itertools.cycle(values)
-        while next(c) != 0:  # Start at the first 0 encountered
+        while next(c)[1] != 0:  # Start at the first 0 encountered
             continue
-        print(values)
-        print(list(itertools.islice(c, 999, 3001, 1000)))
-        return sum(itertools.islice(c, 999, 3001, 1000))  # 1000th, 2000th and 3000th values after 0
+        return sum(num_tuple[1] for num_tuple in itertools.islice(c, 999, 3000, 1000))
 
     def part_one(self):
-        return self.get_coordinates(values=self.decrypt_values())
+        return self.get_coordinates(values=self.mix())
+
+    def part_two(self):
+        key = 811589153
+        self.instructions = [(index, value * key) for index, value in self.instructions]
+        return self.get_coordinates(values=self.mix(rounds=10))
 
 
 class TestFileDecryptor(TestCase):
     def test_get_coordinates(self):
-        values = [1, 2, -3, 4, 0, 3, -2]
+        values = enumerate([1, 2, -3, 4, 0, 3, -2])
         self.assertEqual(3, FileDecryptor.get_coordinates(values))
 
-    def test_decrypt_values(self):
-        self.assertEqual([1, 2, -3, 4, 0, 3, -2], FileDecryptor(test=True).decrypt_values())
+    def test_mix(self):
+        self.assertEqual([1, 2, -3, 4, 0, 3, -2], [num_tuple[1] for num_tuple in FileDecryptor(test=True).mix()])
 
     def test_part_one(self):
         self.assertEqual(3, FileDecryptor(test=True).part_one())
 
+    def test_part_two(self):
+        self.assertEqual(1623178306, FileDecryptor(test=True).part_two())
+
 
 if __name__ == '__main__':
     print('Part One:', FileDecryptor().part_one())
-    # print('Part Two:', FileDecryptor().part_two())
+    print('Part Two:', FileDecryptor().part_two())
